@@ -1,8 +1,18 @@
 let canvas = document.getElementById('main');
 let c = canvas.getContext('2d');
 
-function init() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
+let mpos;
+let cannon;
+let target;
+let ball;
+var level = 1;
+let wall;
+
+function init() {
+    draw.rect();
     update();
 }
 
