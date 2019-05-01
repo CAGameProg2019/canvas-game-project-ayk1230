@@ -12,8 +12,9 @@ class Rectangle {
     draw(c){
         c.strokeStyle = this.stroke;
         c.lineWidth = 5;
-        c.rect(x, y, width, height);
+        c.rect(this.x, this.y, this.width, this.height);
         c.stroke();
+        c.fill();
 
     }
 
