@@ -8,10 +8,13 @@ class Ball extends Vector{
 
     draw(c){
         c.fillStyle = this.color;
+        c.lineWidth = 5;
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
         c.closePath();
+        c.stroke();
         c.fill();
+
     }
 
     intersects(box){
