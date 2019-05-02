@@ -1,8 +1,7 @@
-class Ball {
+class Ball extends Vector{
 
     constructor (x, y, radius, color){
-        this.x = x;
-        this.y = y;
+        super(x,y);
         this.radius = radius;
         this.color = color;
     }
@@ -14,4 +13,12 @@ class Ball {
         c.closePath();
         c.fill();
     }
+
+    intersects(box){
+        if (this.x+ this.radius >= box.x && this.x+this.radius <= box.x + box.width && this.y+ this.radius>= box.y && this.y+ this.radius<= box.y + box.height){
+            return true;
+        }
+        return false;
+    }
 }
+Object.assign(Ball, Vector);
