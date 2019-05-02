@@ -14,22 +14,42 @@ let targetSize = 50;
 
 
 function init() {
-    cannon = new Rectangle(30, window.height-30, 50, 25, "black");
-    ball = new Ball(35, window.height -35, 10, "blue");
 
-    let targetX = Math.random() * canvas.width;
-    let targetY = Math.random() * canvas.height;
-    target = new Rectangle (targetX, targetY, targetSize, targetSize, "yellow");
+    mpos = new Vector(canvas.width/2, canvas.height/2);
 
-    
+    cannon = new Rectangle(30, canvas.height-30, 50, 25, "#0F7D16");
+    ball = new Ball(50, canvas.height-50, 10, "#20DAFF");
+
+    let targetX = canvas.width/2 + Math.random() * (canvas.width/2 - targetSize);
+    let targetY = Math.random() * (canvas.height - targetSize);
+    target = new Rectangle (targetX, targetY, targetSize, targetSize, "#D1FF33");
+
+    wall = new Rectangle (canvas.width/2, canvas.height/2, 30, canvas.height/2, "#616464");
 
 
     update();
 }
 
 function update() {
-    cannon.draw(c);
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    let crash = ball.intersects(target);
+    if(crash){
+        target.color = "red";
+        target.draw(c);
+        level ++;
+    }else{
+        target.draw(c);
+    }
+
     ball.draw(c);
+    cannon.draw(c);
+
+    wall.draw(c);
+
+
+
+
     requestAnimationFrame(update);
 }
 
