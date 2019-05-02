@@ -21,6 +21,7 @@ function init() {
     let targetY = Math.random() * canvas.height;
     target = new Rectangle (targetX, targetY, targetSize, targetSize, "yellow");
 
+    
 
 
     update();
