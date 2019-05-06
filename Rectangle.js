@@ -1,8 +1,7 @@
-class Rectangle {
+class Rectangle extends Vector{
 
     constructor(x, y, width, height, color) {
-        this.x = x;
-        this.y = y;
+        super(x,y);
         this.width = width;
         this.height = height;
         this.color = color;
@@ -18,8 +17,24 @@ class Rectangle {
         c.stroke();
         c.fill();
 
+    }
+
+    rotate(angle, x, y){
+        this.angle = angle;
+        this.x = x;
+        this.y = y;
+
+        c.translate(x+canvas.width/2, y+canvas.height/2);
+        c.rotate(angle);
 
     }
 
+    update(mouse){
+        var vel = new Vector (mouse.x, mouse.y);
+        vel.subVector(this);
+
+
+            this.addVector(vel);
+        }
 
 }
