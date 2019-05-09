@@ -19,12 +19,12 @@ class Rectangle extends Vector{
 
     }
 
-    rotate(angle, x, y){
+    rotate(angle){
         this.angle = angle;
-        this.x = x;
-        this.y = y;
-
-        c.translate(x+canvas.width/2, y+canvas.height/2);
+        // this.x = x;
+        // this.y = y;
+        //
+        // c.translate(x,y);
         c.rotate(angle);
 
     }
