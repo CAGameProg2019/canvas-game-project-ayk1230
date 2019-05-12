@@ -17,6 +17,8 @@ class Ball extends Vector{
 
     }
 
+
+
     intersects(box){
         if (this.x+ this.radius >= box.x && this.x+this.radius <= box.x + box.width && this.y+ this.radius>= box.y && this.y+ this.radius<= box.y + box.height){
             return true;
