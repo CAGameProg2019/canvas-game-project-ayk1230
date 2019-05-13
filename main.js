@@ -11,7 +11,7 @@ let ball;
 var level = 1;
 let wall;
 let targetSize = 50;
-var gravity = 5;
+var gravity = .2;
 var velocity = 10;
 var velocityx;
 var velocityy;
@@ -29,7 +29,7 @@ function init() {
     cannon = new Rectangle(0,0, 70, 30, "#0F7D16");
     ball = new Ball(3,5, 10, "#20DAFF");
 
-    let targetX = canvas.width/2 + Math.random() * (canvas.width/2 - targetSize - 30);
+    let targetX = canvas.width/2 + targetSize + Math.random() * (canvas.width/2 - targetSize*2);
     let targetY = Math.random() * (canvas.height - targetSize);
     target = new Rectangle (targetX, targetY, targetSize, targetSize, "#D1FF33");
 
@@ -43,6 +43,17 @@ function update() {
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     wall.draw(c);
+
+    let crash = ball.intersects(target);
+    if(crash){
+        target.color = "red";
+        target.draw(c);
+        velocity = 0;
+        level+=1;
+        setTimeout();
+    }else{
+        target.draw(c);
+    } // now not working
 
     c.save();
     c.translate(40, canvas.height -40);
@@ -68,62 +79,45 @@ function update() {
         ball.draw(c);
     }
 
-    c.restore();
-
     if(mouseDown){
         state = "shooting";
         setAngle = angle;
+        velocityx = velocity*(Math.cos(setAngle));
+        velocityy = (velocity*(Math.sin(setAngle)));
     }
+
     if(state == 'shooting'){
 
-        velocityx = velocity*(Math.cos(setAngle));
-        velocityy = velocity*(Math.sin(setAngle));
-
+        velocityy += gravity;
         ball.x += velocityx;
-        ball.y = ball.y - velocityy + gravity;
+        ball.y += velocityy;
+        console.log(velocityx);
 
-        ball.draw(c);
-    }
+    } // weird trajectory
+
+
+
+    c.restore();
+
+
 
     c.lineWidth = 15;
     c.font = "20px Arial";
     c.fillStyle = "black";
     c.fillText("Level: "+ level, 40, 50);
+// level # not going up
 
-    let crash = ball.intersects(target);
-    if(crash){
-        target.color = "red";
-        target.draw(c);
-        velocity = 0;
-        level+=1;
-
-        setTimeout();
-    }else{
-        target.draw(c);
-    }
-
-    // if(keyPress.s){
-    //
-    // }
 
 
     requestAnimationFrame(update);
 }
 
-setTimeout(function(){
-    window.location.reload();
-},6000);
+// setTimeout(function(){
+//     window.location.reload();
+// },600);
 
 var mouseDown = false;
 var mouseUp = false;
-
-// function getMousePos(canvas, event){
-//     var rect = canvas.getBoundingCLientRect();
-//     return {
-//         x: event.clientX,
-//         y: event.clientY
-//     };
-// }
 
 window.addEventListener('load', function() {
     init();
