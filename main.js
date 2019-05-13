@@ -6,13 +6,16 @@ canvas.height = window.innerHeight;
 
 let mpos;
 let cannon;
+var keyPress = {
+    f: false
+}
 let target;
 let ball;
 var level = 1;
 let wall;
 let targetSize = 50;
 var gravity = .2;
-var velocity = 10;
+var velocity = 15;
 var velocityx;
 var velocityy;
 var angle;
@@ -23,11 +26,14 @@ var state = 'ready';
 
 function init() {
 
+    state = "ready";
+
     mpos = new Vector(canvas.width/2, canvas.height/2);
 
-
+    velocityx=0;
+    velocityy=0;
     cannon = new Rectangle(0,0, 70, 30, "#0F7D16");
-    ball = new Ball(3,5, 10, "#20DAFF");
+    ball = new Ball(50,canvas.height - 40, 10, "#20DAFF");
 
     let targetX = canvas.width/2 + targetSize + Math.random() * (canvas.width/2 - targetSize*2);
     let targetY = Math.random() * (canvas.height - targetSize);
@@ -42,18 +48,16 @@ function init() {
 function update() {
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    wall.draw(c);
+    if(keyPress.w){
+        velocity ++;
+    }
 
-    let crash = ball.intersects(target);
-    if(crash){
-        target.color = "red";
-        target.draw(c);
-        velocity = 0;
-        level+=1;
-        setTimeout();
-    }else{
-        target.draw(c);
-    } // now not working
+    if(keyPress.s){
+        velocity--;
+    }
+
+
+    wall.draw(c);
 
     c.save();
     c.translate(40, canvas.height -40);
@@ -64,57 +68,59 @@ function update() {
         cannon.x = -13;
         cannon.y = -9;
         cannon.draw(c);
-        ball.draw(c);
     }else if (angle <-90){
         cannon.rotate(90);
         cannon.x = -13;
         cannon.y = -9;
         cannon.draw(c);
-        ball.draw(c);
     }else if (angle>0){
         cannon.rotate(0);
         cannon.x = -13;
         cannon.y = -9;
         cannon.draw(c);
-        ball.draw(c);
     }
 
-    if(mouseDown){
-        state = "shooting";
-        setAngle = angle;
-        velocityx = velocity*(Math.cos(setAngle));
-        velocityy = (velocity*(Math.sin(setAngle)));
-    }
-
-    if(state == 'shooting'){
-
+    if(state == "shooting"){
         velocityy += gravity;
         ball.x += velocityx;
         ball.y += velocityy;
-        console.log(velocityx);
-
-    } // weird trajectory
-
-
+    }
 
     c.restore();
 
+    ball.draw(c);
 
+    let crash = ball.intersects(target);
+    if(crash){
+        target.color = "red";
+        velocityx = 0;
+        velocityy = 0;
+        level+=1;
+
+    }else if (!(ball.x > canvas.width ||  ball.y > canvas.height)){
+        requestAnimationFrame(update);
+    }
+    target.draw(c);
 
     c.lineWidth = 15;
     c.font = "20px Arial";
     c.fillStyle = "black";
     c.fillText("Level: "+ level, 40, 50);
-// level # not going up
+    c.fillText("Speed: "+ velocity, 40, 70);
 
-
-
-    requestAnimationFrame(update);
 }
 
-// setTimeout(function(){
-//     window.location.reload();
-// },600);
+function shooting(){
+    state = "shooting";
+    setAngle = angle;
+    velocityx = velocity*(Math.cos(setAngle));
+    velocityy = (velocity*(Math.sin(setAngle)));
+
+}
+
+setInterval(function() {
+    init();
+}, 6000);
 
 var mouseDown = false;
 var mouseUp = false;
@@ -130,19 +136,38 @@ window.addEventListener('load', function() {
         mpos.x = event.clientX - canvas.offsetLeft;
         mpos.y = event.clientY - canvas.offsetTop;
 
-        mpos.print();
+        //mpos.print();
 
     });
 
     window.addEventListener('mousedown', function(event){
-        mouseDown = true;
-        mouseUp = false;
+        if(state != 'shooting'){
+            shooting();
+        }
     });
 
     window.addEventListener('mouseup',function(event){
         mouseDown = false;
         mouseUp = true;
-    })
+    });
+
+    window.addEventListener('keydown', function(event){
+        if(event.key === 'w'){
+            keyPress.w = true;
+        }
+        if(event.key === 's'){
+            keyPress.s = true;
+        }
+    });
+
+    window.addEventListener('keyup', function(event){
+        if(event.key === 'w'){
+            keyPress.w = false;
+        }
+        if(event.key === 's'){
+            keyPress.s = false;
+        }
+    });
 
 
 });
