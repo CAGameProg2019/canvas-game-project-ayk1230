@@ -16,6 +16,11 @@ class Ball extends Vector{
         c.fill();
 
     }
+    rotate(angle){
+        this.angle = angle;
+        c.rotate(angle);
+
+    }
 
 
 
